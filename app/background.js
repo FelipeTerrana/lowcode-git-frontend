@@ -31,6 +31,8 @@ chrome.webRequest.onBeforeRequest.addListener(
               "method": "POST",
               "mode": "cors"
             });
+
+            // TODO interromper chamada quando é retornado um conflito pelo commit
         }
     },
     { urls: ["*://*.budibase.app/*"] },
