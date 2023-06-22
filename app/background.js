@@ -22,17 +22,28 @@ chrome.webRequest.onBeforeRequest.addListener(
 
             fetch(BACKEND_URL, {
               "body": JSON.stringify({
-                "contentBase64": base64Code,
-                "path": GIT_PATH
+                  "contentBase64": base64Code,
+                  "path": GIT_PATH,
+                  //"authorName": NAME, // NAME?
+                  //"authorEmail": EMAIL, // EMAIL?
               }),
               "headers": {
-                "Content-Type": "application/json"
+                  "Content-Type": "application/json"
               },
               "method": "POST",
               "mode": "cors"
+            }).then(response => {
+                if (response.json.success) {
+                    alert("Commit realizado com sucesso");
+                } else {
+                    alert("Erro ao realizar commit");
+                    alert(response.json.message)
+                }
+            }).catch(error => {
+                alert("Erro ao fazer requisição");
+                alert(error);
+                console.error(error);
             });
-
-            // TODO interromper chamada quando é retornado um conflito pelo commit
         }
     },
     { urls: ["*://*.budibase.app/*"] },
