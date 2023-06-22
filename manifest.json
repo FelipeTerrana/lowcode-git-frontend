@@ -1,0 +1,14 @@
+{
+    "name": "Budibase code interceptor",
+    "version": "0.0.1",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "app/background.js"
+    },
+    "host_permissions": [
+        "https://*.budibase.app/*"
+    ],
+    "permissions": [
+        "webRequest"
+    ]
+}
