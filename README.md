@@ -4,8 +4,8 @@ Esse projeto é uma extensão do Chrome, que intercepta uma alteração em espec
 
 Quando o script de validação do campo "Joined" é alterado com essa extensão ativa e o backend escutando na porta 8080, o conteúdo do novo script é selecionado e enviado para o commit.
 
-![](https://raw.githubusercontent.com/FelipeTerrana/lowcode-git-frontend/main/frontend1.png)
-![](https://raw.githubusercontent.com/FelipeTerrana/lowcode-git-frontend/main/frontend2.png)
+![](https://raw.githubusercontent.com/FelipeTerrana/lowcode-git-frontend/master/frontend1.png)
+![](https://raw.githubusercontent.com/FelipeTerrana/lowcode-git-frontend/master/frontend2.png)
 
 ## Instruções de execução
 
