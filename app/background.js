@@ -24,8 +24,7 @@ chrome.webRequest.onBeforeRequest.addListener(
               "body": JSON.stringify({
                   "contentBase64": base64Code,
                   "path": GIT_PATH,
-                  //"authorName": NAME, // NAME?
-                  //"authorEmail": EMAIL, // EMAIL?
+                  "authorEmail": getUserEmail()
               }),
               "headers": {
                   "Content-Type": "application/json"
@@ -55,4 +54,8 @@ chrome.webRequest.onBeforeRequest.addListener(
 function decodeBody(bytes) {
     return JSON.parse(decodeURIComponent(String.fromCharCode.apply(null,
         new Uint8Array(bytes))));
+}
+
+function getUserEmail() {
+    return document.querySelector("#app > div.root.svelte-gzmtw > div.top-nav.svelte-gzmtw > div.toprightnav.svelte-gzmtw > div.avatars.svelte-16y517q > div > div.tooltip.svelte-10v3vdh > span > span.spectrum-Tooltip-label.svelte-12iylyn").innerHTML;
 }
