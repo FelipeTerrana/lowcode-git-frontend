@@ -20,28 +20,43 @@ chrome.webRequest.onBeforeRequest.addListener(
 
             [, base64Code] = base64Code.match(/^\{\{ js \"(.*)\" \}\}$/);
 
-            fetch(BACKEND_URL, {
-              "body": JSON.stringify({
-                  "contentBase64": base64Code,
-                  "path": GIT_PATH,
-                  "authorEmail": getUserEmail()
-              }),
-              "headers": {
-                  "Content-Type": "application/json"
-              },
-              "method": "POST",
-              "mode": "cors"
-            }).then(response => {
-                if (response.json.success) {
-                    alert("Commit realizado com sucesso");
-                } else {
-                    alert("Erro ao realizar commit");
-                    alert(response.json.message)
-                }
-            }).catch(error => {
-                alert("Erro ao fazer requisição");
-                alert(error);
-                console.error(error);
+            chrome.tabs.query({ active: true, currentWindow: true }).then(tabs => {
+                chrome.scripting.executeScript({
+                    "target": { "tabId": tabs[0].id },
+                    "world": "MAIN",
+                    "func": () => {
+                        const userEmail = document.querySelector("#app > div.root.svelte-gzmtw > div.top-nav.svelte-gzmtw > div.toprightnav.svelte-gzmtw > div.avatars.svelte-16y517q > div > div.tooltip.svelte-10v3vdh > span > span.spectrum-Tooltip-label.svelte-12iylyn").innerHTML;
+
+                        return userEmail;
+                    }
+                }).then(results => {
+                    const userEmail = results[0].result;
+
+                    fetch(BACKEND_URL, {
+                      "body": JSON.stringify({
+                          "contentBase64": base64Code,
+                          "path": GIT_PATH,
+                          "authorEmail": userEmail
+                      }),
+                      "headers": {
+                          "Content-Type": "application/json"
+                      },
+                      "method": "POST",
+                      "mode": "cors"
+                    }).then(response => {
+                        response.json().then(body => {
+                            if (body.success) {
+                                console.log("Commit realizado com sucesso");
+                            } else {
+                                console.error("Erro ao realizar commit");
+                                console.error(body)
+                            }
+                        });
+                    }).catch(error => {
+                        console.error("Erro ao fazer requisição");
+                        console.error(error);
+                    });
+                });
             });
         }
     },
@@ -54,8 +69,4 @@ chrome.webRequest.onBeforeRequest.addListener(
 function decodeBody(bytes) {
     return JSON.parse(decodeURIComponent(String.fromCharCode.apply(null,
         new Uint8Array(bytes))));
-}
-
-function getUserEmail() {
-    return document.querySelector("#app > div.root.svelte-gzmtw > div.top-nav.svelte-gzmtw > div.toprightnav.svelte-gzmtw > div.avatars.svelte-16y517q > div > div.tooltip.svelte-10v3vdh > span > span.spectrum-Tooltip-label.svelte-12iylyn").innerHTML;
 }
