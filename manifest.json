@@ -5,10 +5,16 @@
     "background": {
         "service_worker": "app/background.js"
     },
+    "content_scripts": [{
+        "matches": ["https://*.budibase.app/*"],
+        "js": ["app/pageScript.js"]
+    }],
     "host_permissions": [
         "https://*.budibase.app/*"
     ],
     "permissions": [
-        "webRequest"
+        "webRequest",
+        "scripting",
+        "activeTab"
     ]
 }
