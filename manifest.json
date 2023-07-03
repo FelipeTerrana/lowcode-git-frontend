@@ -7,6 +7,7 @@
     },
     "content_scripts": [{
         "matches": ["https://*.budibase.app/*"],
+        "css": ["style/codeEditor.css"],
         "js": ["app/pageScript.js"]
     }],
     "host_permissions": [

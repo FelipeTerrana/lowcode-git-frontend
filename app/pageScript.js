@@ -7,8 +7,9 @@ startObserver();
 
 
 function startObserver() {
+    const GIT_PATH = "dateValidation.js";
+    
     const body = document.getElementById("app");
-
     const config = { "childList": true };
 
     const observer = new MutationObserver((mutations) => {
@@ -27,8 +28,9 @@ function startObserver() {
             return;
         }
 
-        // TODO commits do backend
-        setLineCommits(lineNodeList);
+        fetchCommitStrings(GIT_PATH).then(commitStrings => {
+            setLineCommits(lineNodeList, commitStrings);
+        });
     });
 
     observer.observe(body, config);
@@ -36,7 +38,31 @@ function startObserver() {
 
 
 
+function fetchCommitStrings(path) {
+    // TODO pegar do backend
+    return Promise.resolve([
+        "fulano@email.com - 02/07/2023 19:05:54",
+        "fulano@email.com - 02/07/2023 19:05:54",
+        "sicrano@email.com - 21/06/2023 10:13:20",
+        "beltrano@email.com - 23/07/2023 13:51:03",
+        "fulano@email.com - 02/07/2023 19:05:54",
+        "fulano@email.com - 02/07/2023 19:05:54",
+        "fulano@email.com - 02/07/2023 19:05:54"
+    ]);
+}
+
+
+
 function setLineCommits(lineNodeList, commitStrings) {
-    // TODO
-    console.log(lineNodeList);
+    for(let i=0; i < lineNodeList.length; i++) {
+        lineNodeList[i].setAttribute("commit", commitStrings[i]);
+
+        const observer = new MutationObserver(() => {
+            if(!lineNodeList[i].getAttribute("commit")) {
+                lineNodeList[i].setAttribute("commit", commitStrings[i]);
+            }
+        });
+
+        observer.observe(lineNodeList[i], { "attributes": true });
+    }
 }

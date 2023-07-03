@@ -38,9 +38,9 @@ function getBase64CodeFromRequest(body) {
         ?._children[0]
         ?._children[2]
         ?._children[7]
-        ?.validation[0]?.value || "";
+        ?.validation[0]?.value ?? "";
 
-    [, base64Code] = base64Code.match(/^\{\{ js \"(.*)\" \}\}$/);
+    [, base64Code] = base64Code.match(/^\{\{ js \"(.*)\" \}\}$/) ?? [];
 
     return base64Code;
 }

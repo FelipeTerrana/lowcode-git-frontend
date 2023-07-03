@@ -1,0 +1,5 @@
+.cm-activeLine::after {
+    content: attr(commit);
+    color: #444444;
+    padding-left: 2em;
+}
