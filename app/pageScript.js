@@ -39,30 +39,33 @@ function startObserver() {
 
 
 function fetchCommitStrings(path) {
-    // TODO pegar do backend
-    return Promise.resolve([
-        "fulano@email.com - 02/07/2023 19:05:54",
-        "fulano@email.com - 02/07/2023 19:05:54",
-        "sicrano@email.com - 21/06/2023 10:13:20",
-        "beltrano@email.com - 23/07/2023 13:51:03",
-        "fulano@email.com - 02/07/2023 19:05:54",
-        "fulano@email.com - 02/07/2023 19:05:54",
-        "fulano@email.com - 02/07/2023 19:05:54"
-    ]);
+    const BACKEND_URL = `http://localhost:8080/blame/${encodeURIComponent(path)}`;
+
+    return fetch(BACKEND_URL, {
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "method": "GET",
+        "mode": "cors"
+    }).then(response => response.json())
+      .then(body => body.data);
 }
 
 
 
 function setLineCommits(lineNodeList, commitStrings) {
     for(let i=0; i < lineNodeList.length; i++) {
-        lineNodeList[i].setAttribute("commit", commitStrings[i]);
+        let lineNode = lineNodeList[i];
+        let commitString = commitStrings[i] ?? "";
+
+        lineNode.setAttribute("commit", commitString);
 
         const observer = new MutationObserver(() => {
-            if(!lineNodeList[i].getAttribute("commit")) {
-                lineNodeList[i].setAttribute("commit", commitStrings[i]);
+            if(!lineNode.hasAttribute("commit")) {
+                lineNode.setAttribute("commit", commitString);
             }
         });
 
-        observer.observe(lineNodeList[i], { "attributes": true });
+        observer.observe(lineNode, { "attributes": true });
     }
 }
